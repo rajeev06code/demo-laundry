@@ -91,7 +91,7 @@ export default function Hero() {
                 alt="Fresh laundry"
                 width={600}
                 height={400}
-                className="w-full h-[300px] md:h-[400px] object-cover"
+                className="w-full h-[200px] md:h-[400px] object-cover"
               />
 
               {/* Special offer badge */}
