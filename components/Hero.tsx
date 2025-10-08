@@ -15,11 +15,11 @@ export default function Hero() {
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent leading-tight">
               Fresh Clothes,
-              <br />
+              <br className="hidden md:block"/>
               Delivered
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-600 mb-6 max-w-2xl leading-relaxed">
+            <p className="hidden md:block text-lg md:text-xl text-gray-600 mb-6 max-w-2xl leading-relaxed">
               Professional laundry and dry cleaning service with free pickup and delivery.
               Get your clothes fresh, clean, and perfectly folded in 24-48 hours.
             </p>
@@ -52,7 +52,7 @@ export default function Hero() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-start items-center">
               <Link href="/order/new">
                 <Button size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white px-6 py-3 text-base font-semibold shadow-lg hover:shadow-xl transition-all group">
                   Get Started Today
