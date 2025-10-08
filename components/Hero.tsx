@@ -86,12 +86,14 @@ export default function Hero() {
           <div className="order-1 md:order-2 relative">
             <div className="relative rounded-2xl overflow-hidden shadow-xl">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 z-10" />
-              <Image
-                src="https://media.istockphoto.com/id/542303516/photo/worker-laundry-ironed-clothes-iron-dry.jpg?s=612x612&w=0&k=20&c=lcI-9Caxcqd-ZI9vwAPmHAl76cB_T205hB8tFr2Iclg="
-                alt="Fresh laundry"
-                width={600}
-                height={400}
+              <video
+                src="https://www.pexels.com/download/video/5592513/"
+                autoPlay
+                muted
+                loop
+                playsInline
                 className="w-full h-[200px] md:h-[400px] object-cover"
+                style={{ filter: 'brightness(1.1) contrast(1.05)' }}
               />
 
               {/* Special offer badge */}
