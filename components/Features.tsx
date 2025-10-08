@@ -12,6 +12,7 @@ export default function Features() {
       description: "Get your clothes back fresh in 24-48 hours",
       color: "from-blue-500 to-cyan-500",
       bgColor: "from-blue-50 to-cyan-50",
+      cardBg: "from-blue-50/80 to-cyan-50/80",
       textColor: "text-blue-600",
       delay: "0ms"
     },
@@ -19,58 +20,73 @@ export default function Features() {
       icon: TruckIcon,
       title: "Free Pickup & Delivery",
       description: "Convenient doorstep service at no extra cost",
-      color: "from-blue-500 to-cyan-500",
-      bgColor: "from-blue-50 to-cyan-50",
-      textColor: "text-blue-600",
+      color: "from-cyan-500 to-teal-500",
+      bgColor: "from-cyan-50 to-teal-50",
+      cardBg: "from-cyan-50/80 to-teal-50/80",
+      textColor: "text-cyan-600",
       delay: "100ms"
     },
     {
       icon: Sparkles,
       title: "Premium Quality",
       description: "Professional care with premium detergents",
-      color: "from-blue-500 to-cyan-500",
-      bgColor: "from-blue-50 to-cyan-50",
-      textColor: "text-blue-600",
+      color: "from-teal-500 to-green-500",
+      bgColor: "from-teal-50 to-green-50",
+      cardBg: "from-teal-50/80 to-green-50/80",
+      textColor: "text-teal-600",
       delay: "200ms"
     },
     {
       icon: MapPin,
       title: "Track Your Order",
       description: "Real-time updates on your laundry status",
-      color: "from-blue-500 to-cyan-500",
-      bgColor: "from-blue-50 to-cyan-50",
-      textColor: "text-blue-600",
+      color: "from-green-500 to-blue-500",
+      bgColor: "from-green-50 to-blue-50",
+      cardBg: "from-green-50/80 to-blue-50/80",
+      textColor: "text-green-600",
       delay: "300ms"
     }
   ];
 
   return (
-    <section id="features" className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-10 right-10 w-40 h-40 bg-blue-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 left-10 w-32 h-32 bg-cyan-500 rounded-full blur-3xl"></div>
+    <section id="features" className="py-24 bg-gradient-to-br from-slate-50 via-blue-50/30 to-cyan-50/50 relative overflow-hidden">
+      {/* Enhanced Background decoration */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-cyan-400/10 to-teal-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-gradient-to-r from-purple-400/5 to-pink-400/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+
+        {/* Geometric patterns */}
+        <div className="absolute top-10 right-1/4 w-32 h-32 bg-gradient-to-br from-blue-200/20 to-cyan-200/20 rotate-45 rounded-2xl blur-2xl"></div>
+        <div className="absolute bottom-10 left-1/3 w-24 h-24 bg-gradient-to-br from-teal-200/20 to-green-200/20 rotate-12 rounded-full blur-2xl"></div>
       </div>
 
       <div className="container mx-auto px-4 relative">
-        <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4 border-blue-200 text-blue-600 px-4 py-2">
-            <Star className="h-4 w-4 mr-2" />
+        <div className="text-center mb-20">
+          <Badge variant="outline" className="mb-6 border-blue-200 text-blue-600 px-6 py-3 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+            <Star className="h-5 w-5 mr-2 animate-pulse" />
             Why Choose Us?
           </Badge>
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent leading-tight">
             Why Choose FreshFold?
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Experience the difference with our premium laundry service
+          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Experience the difference with our premium laundry service that cares for your clothes
           </p>
+
+          {/* Decorative elements */}
+          <div className="flex justify-center items-center gap-4 mt-8">
+            <div className="h-1 w-16 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full"></div>
+            <Star className="h-6 w-6 text-yellow-400 animate-bounce" />
+            <div className="h-1 w-16 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full"></div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="group text-center hover:shadow-xl transition-all duration-500 border-0 bg-white hover:bg-gradient-to-br hover:from-white hover:to-gray-50 hover:-translate-y-2 relative overflow-hidden"
+              className={`group text-center hover:shadow-2xl transition-all duration-500 border-0 bg-gradient-to-br ${feature.cardBg} hover:${feature.cardBg} hover:from-white/90 hover:to-white/70 hover:-translate-y-3 hover:scale-[1.02] relative overflow-hidden backdrop-blur-sm`}
               style={{ animationDelay: feature.delay }}
             >
               {/* Background gradient overlay */}

@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Package, TruckIcon, Check, ArrowRight, Sparkles } from "lucide-react";
+import { Package, TruckIcon, Check, ArrowRight, Sparkles, Clock, Shield, Star } from "lucide-react";
 
 export default function HowItWorks() {
   const steps = [
@@ -44,11 +44,16 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-cyan-500 rounded-full blur-3xl"></div>
+    <section id="how-it-works" className="py-24 bg-gradient-to-br from-slate-50 via-blue-50/30 to-cyan-50/50 relative overflow-hidden">
+      {/* Enhanced Background decoration */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-cyan-400/10 to-teal-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-gradient-to-r from-purple-400/5 to-pink-400/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+
+        {/* Geometric patterns */}
+        <div className="absolute top-10 right-1/4 w-32 h-32 bg-gradient-to-br from-blue-200/20 to-cyan-200/20 rotate-45 rounded-2xl blur-2xl"></div>
+        <div className="absolute bottom-10 left-1/3 w-24 h-24 bg-gradient-to-br from-teal-200/20 to-green-200/20 rotate-12 rounded-full blur-2xl"></div>
       </div>
 
       <div className="container mx-auto px-4 relative">
@@ -68,7 +73,7 @@ export default function HowItWorks() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto relative">
           {steps.map((step, index) => (
             <div key={index} className="relative group">
-              <Card className="text-center p-6 h-full hover:shadow-xl transition-all duration-300 border-0 bg-white hover:bg-gradient-to-br hover:from-white hover:to-gray-50 hover:-translate-y-2 relative overflow-hidden">
+              <Card className={`text-center p-8 h-full hover:shadow-2xl transition-all duration-500 border-0 bg-gradient-to-br ${step.bgColor} hover:${step.bgColor} hover:from-white/80 hover:to-white/60 hover:-translate-y-3 hover:scale-[1.02] relative overflow-hidden backdrop-blur-sm`}>
                 {/* Step number background */}
                 <div className={`absolute -top-2 -right-2 w-16 h-16 bg-gradient-to-br ${step.color} rounded-full opacity-10 group-hover:opacity-20 transition-opacity`}></div>
 
@@ -83,10 +88,10 @@ export default function HowItWorks() {
                     <step.icon className={`h-6 w-6 ${step.textColor}`} />
                   </div>
 
-                  <h3 className="text-lg font-semibold mb-2 text-gray-800 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg font-bold mb-3 text-gray-800 group-hover:text-blue-700 transition-colors">
                     {step.title}
                   </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-gray-700 leading-relaxed font-medium">
                     {step.description}
                   </p>
                 </CardContent>
