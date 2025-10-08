@@ -197,7 +197,19 @@ export default function NewOrderPage() {
   };
 
   const handleModalSubmit = () => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const userEmail = localStorage.getItem("userEmail") || "";
+    const userName = localStorage.getItem("userName") || "";
+
+    if (!isLoggedIn) {
+      alert("Please sign in to place your order");
+      router.push("/login");
+      return;
+    }
+
     const orderData = {
+      orderNumber: `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`,
       service: selectedServiceData?.name,
       items,
       pickupDate,
@@ -210,8 +222,26 @@ export default function NewOrderPage() {
       promoCode: appliedPromo?.code,
       total: calculateTotal(),
       discount: calculateDiscount(),
-      final: calculateFinal()
+      final: calculateFinal(),
+      userEmail,
+      userName,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+      timeline: [
+        { status: "pending", label: "Order Placed", time: new Date().toLocaleString(), completed: true },
+        { status: "confirmed", label: "Order Confirmed", time: "", completed: false },
+        { status: "picked_up", label: "Picked Up", time: "", completed: false },
+        { status: "processing", label: "Processing", time: "", completed: false },
+        { status: "ready", label: "Ready for Delivery", time: "", completed: false },
+        { status: "out_for_delivery", label: "Out for Delivery", time: "", completed: false },
+        { status: "delivered", label: "Delivered", time: "", completed: false }
+      ]
     };
+
+    // Store order in localStorage
+    const existingOrders = JSON.parse(localStorage.getItem("userOrders") || "[]");
+    const updatedOrders = [orderData, ...existingOrders];
+    localStorage.setItem("userOrders", JSON.stringify(updatedOrders));
 
     console.log("Order submitted:", orderData);
     setIsBookingModalOpen(false);
@@ -789,7 +819,7 @@ export default function NewOrderPage() {
                           {appliedPromo && (
                             <div className="mt-2 flex items-center gap-2 text-green-600 bg-green-50 p-3 rounded-lg">
                               <CheckCircle2 className="h-4 w-4" />
-                              <span className="font-medium">Promo code "{appliedPromo.code}" applied! {appliedPromo.discount}% off</span>
+                              <span className="font-medium">Promo code &quot;{appliedPromo.code}&quot; applied! {appliedPromo.discount}% off</span>
                             </div>
                           )}
                         </div>

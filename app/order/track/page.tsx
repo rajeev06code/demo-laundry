@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,70 +19,53 @@ import {
   TruckIcon,
   Home,
   Star,
-  MessageSquare
+  MessageSquare,
+  User
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const mockOrders = {
-  "ORD-2025-001": {
-    orderNumber: "ORD-2025-001",
-    service: "Premium Wash",
-    status: "out_for_delivery",
-    items: [
-      { name: "Shirt", quantity: 3 },
-      { name: "Pants", quantity: 2 },
-      { name: "Dress", quantity: 1 }
-    ],
-    pickupDate: "Oct 6, 2025",
-    deliveryDate: "Oct 8, 2025",
-    total: 450.00,
-    timeline: [
-      { status: "pending", label: "Order Placed", time: "Oct 6, 10:30 AM", completed: true },
-      { status: "confirmed", label: "Order Confirmed", time: "Oct 6, 10:45 AM", completed: true },
-      { status: "picked_up", label: "Picked Up", time: "Oct 6, 2:15 PM", completed: true },
-      { status: "processing", label: "Processing", time: "Oct 6, 3:00 PM", completed: true },
-      { status: "ready", label: "Ready for Delivery", time: "Oct 8, 9:00 AM", completed: true },
-      { status: "out_for_delivery", label: "Out for Delivery", time: "Oct 8, 11:30 AM", completed: true },
-      { status: "delivered", label: "Delivered", time: "", completed: false }
-    ]
-  },
-  "ORD-2025-002": {
-    orderNumber: "ORD-2025-002",
-    service: "Dry Cleaning",
-    status: "processing",
-    items: [
-      { name: "Suit", quantity: 1 },
-      { name: "Jacket", quantity: 1 }
-    ],
-    pickupDate: "Oct 7, 2025",
-    deliveryDate: "Oct 9, 2025",
-    total: 800.00,
-    timeline: [
-      { status: "pending", label: "Order Placed", time: "Oct 7, 9:15 AM", completed: true },
-      { status: "confirmed", label: "Order Confirmed", time: "Oct 7, 9:30 AM", completed: true },
-      { status: "picked_up", label: "Picked Up", time: "Oct 7, 1:00 PM", completed: true },
-      { status: "processing", label: "Processing", time: "Oct 7, 2:30 PM", completed: true },
-      { status: "ready", label: "Ready for Delivery", time: "", completed: false },
-      { status: "out_for_delivery", label: "Out for Delivery", time: "", completed: false },
-      { status: "delivered", label: "Delivered", time: "", completed: false }
-    ]
-  }
-};
 
 export default function TrackOrderPage() {
   const [orderNumber, setOrderNumber] = useState("");
   const [trackedOrder, setTrackedOrder] = useState<any>(null);
+  const [userOrders, setUserOrders] = useState<any[]>([]);
   const [showReview, setShowReview] = useState(false);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
+  const [showOrderList, setShowOrderList] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (!isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+
+    // Load user's orders
+    const orders = JSON.parse(localStorage.getItem("userOrders") || "[]");
+    setUserOrders(orders);
+  }, [router]);
 
   const handleTrackOrder = () => {
-    const order = mockOrders[orderNumber as keyof typeof mockOrders];
+    const order = userOrders.find(order => order.orderNumber === orderNumber);
     if (order) {
       setTrackedOrder(order);
+      setShowOrderList(false);
     } else {
-      alert("Order not found. Try: ORD-2025-001 or ORD-2025-002");
+      alert("Order not found. Please check your order number.");
     }
+  };
+
+  const handleSelectOrder = (order: any) => {
+    setTrackedOrder(order);
+    setShowOrderList(false);
+  };
+
+  const handleBackToList = () => {
+    setTrackedOrder(null);
+    setShowOrderList(true);
+    setOrderNumber("");
   };
 
   const getStatusColor = (status: string) => {
@@ -141,33 +125,112 @@ export default function TrackOrderPage() {
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Track Your Order</h1>
-          <p className="text-gray-600">Enter your order number to see real-time status updates</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">My Bookings</h1>
+         
         </div>
 
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Enter Order Number</CardTitle>
-            <CardDescription>You can find your order number in the confirmation email</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex gap-2">
-              <div className="flex-1">
-                <Input
-                  placeholder="e.g., ORD-2025-001"
-                  value={orderNumber}
-                  onChange={(e) => setOrderNumber(e.target.value.toUpperCase())}
-                  onKeyPress={(e) => e.key === "Enter" && handleTrackOrder()}
-                />
+        {/* Order Search - Only show when not viewing order list */}
+        {!showOrderList && (
+          <Card className="mb-8">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Track Specific Order</CardTitle>
+                  <CardDescription>Enter your order number to see detailed status</CardDescription>
+                </div>
+                <Button variant="outline" onClick={handleBackToList} className="flex items-center gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Orders
+                </Button>
               </div>
-              <Button onClick={handleTrackOrder} className="bg-gradient-to-r from-blue-600 to-cyan-600">
-                <Search className="mr-2 h-4 w-4" />
-                Track
-              </Button>
-            </div>
-            <p className="text-xs text-gray-500 mt-2">Demo: Try ORD-2025-001 or ORD-2025-002</p>
-          </CardContent>
-        </Card>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <Input
+                    placeholder="e.g., ORD-2025-001"
+                    value={orderNumber}
+                    onChange={(e) => setOrderNumber(e.target.value.toUpperCase())}
+                    onKeyPress={(e) => e.key === "Enter" && handleTrackOrder()}
+                  />
+                </div>
+                <Button onClick={handleTrackOrder} className="bg-gradient-to-r from-blue-600 to-cyan-600">
+                  <Search className="mr-2 h-4 w-4" />
+                  Track
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* My Bookings List */}
+        {showOrderList && userOrders.length > 0 && (
+          <Card className="mb-8">
+            <CardHeader>
+         
+              <CardDescription>Your recent laundry service orders</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {userOrders.map((order, index) => (
+                  <div key={order.orderNumber || index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer" onClick={() => handleSelectOrder(order)}>
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <h3 className="font-semibold text-gray-800">{order.orderNumber}</h3>
+                        <p className="text-sm text-gray-600">{order.service}</p>
+                      </div>
+                      <Badge className={cn("text-xs px-2 py-1", getStatusColor(order.status))}>
+                        {order.status.split("_").map((word: string) =>
+                          word.charAt(0).toUpperCase() + word.slice(1)
+                        ).join(" ")}
+                      </Badge>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-4 mb-3">
+                      <div className="bg-blue-50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-600 mb-1">Pickup Date</div>
+                        <div className="font-medium text-sm">{order.pickupDate}</div>
+                      </div>
+                      <div className="bg-green-50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-600 mb-1">Delivery Date</div>
+                        <div className="font-medium text-sm">{order.deliveryDate}</div>
+                      </div>
+                      <div className="bg-purple-50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-600 mb-1">Total Amount</div>
+                        <div className="font-medium text-sm text-blue-600">₹{order.total?.toFixed(2) || order.final?.toFixed(2)}</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-gray-500">
+                        Ordered on: {new Date(order.createdAt).toLocaleDateString()}
+                      </div>
+                      <Button size="sm" variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
+                        Track This Order
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* No Orders State */}
+        {showOrderList && userOrders.length === 0 && (
+          <Card className="mb-8">
+            <CardContent className="text-center py-12">
+              <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">No Orders Yet</h3>
+              <p className="text-gray-600 mb-6">You haven't placed any orders yet. Start by booking your first laundry service!</p>
+              <Link href="/order/new">
+                <Button className="bg-gradient-to-r from-blue-600 to-cyan-600">
+                  Book Your First Order
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        )}
 
         {trackedOrder && (
           <div className="space-y-6">
